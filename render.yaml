@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: skillify-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 app:app
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: FLASK_DEBUG
+        value: "False"
+      - key: AI_PROVIDER
+        value: groq
+      - key: AI_FALLBACK_PROVIDER
+        value: nvidia
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: NVIDIA_MODEL
+        value: nvidia/nemotron-3-nano-30b-a3b
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: DEEPGRAM_MODEL
+        value: nova-2
+      - key: JOB_MARKET_CACHE_SECONDS
+        value: "900"
+      - key: REMOTIVE_CACHE_SECONDS
+        value: "21600"
+      - key: THE_MUSE_API_KEY
+        sync: false
+      - key: THE_MUSE_CACHE_SECONDS
+        value: "3600"
+      - key: THE_MUSE_PAGES
+        value: "5"
+      - key: FRONTEND_URL
+        value: https://skillify-hire.vercel.app
+      - key: FRONTEND_URLS
+        value: https://skillify-hire.vercel.app,https://skillify-blue.vercel.app
+      - key: BACKEND_URL
+        value: https://skillify-api.onrender.com
+      - key: DATABASE_URL
+        sync: false
+
+databases:
+  - name: skillify-db
+    plan: free
+    databaseName: skillify
+    user: skillify
